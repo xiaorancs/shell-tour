@@ -125,5 +125,48 @@ su: 切换用户，root用户切换成其他用户一般不需要密码，其他
 ```
 
 ## 2. 文件权限
+Linux系统中万物皆文件，由于文件权限操作中，需要用到很多命令，例如：ls、cat、chmod等，文件权限会在文件的操作中进行讲解。
 
 ## 3. 环境变量
+
+Linux由于是多用户的操作系统，因此存在两个环境变量文件，/etc/profile和.bashrc。
+
+|文件|类型|作用域|用户|即时生效方式|
+|:--:|:--:|:--:|:--:|:--:|
+|/etc/profile|整个系统只有一个|一旦修改，作用域全部用户|只有管理用户和root用户能够修改|source /etc/profile|
+|~/.bastrc|每个用户一个，在用户的根目录下|一旦修改作用当前用户|管理员和root用户以及当前用户可以修改|source ~/.bashrc|
+
+临时变量：是当前终端下执行export命令，没有写入文件的命令。
+
+例如，有些系统的终端默认是不支持中文显示的，此时如果你不想修改系统变量，可以临时执行下面的命令：
+```
+# export LANG="zh_CN.UTF-8"
+# export SYSFONT="latarcyrheb-sun16"
+# export SUPPORTED="zh_CN.UTF-8:zh_CN:zh"
+```
+
+配置Java环境变量
+
+我们基于用户foolcat配置java环境环境，采用Jdk1.8作为例子。
+```
+// 1. 下载jdk，由于oracle需要登录下载，这里使用清华镜像
+# cd Downloads
+# wget https://mirrors.tuna.tsinghua.edu.cn/AdoptOpenJDK/8/jdk/x64/linux/OpenJDK8U-jdk_x64_linux_openj9_8u265b01_openj9-0.21.0.tar.gz
+
+// 解压文件
+# tar -zxf OpenJDK8U-jdk_x64_linux_openj9_8u265b01_openj9-0.21.0.tar.gz
+// 将文件移动到指定目录~/Tools/
+# mv jdk8u265-b01 ~/Tools/jdk8
+
+// 配置环境变量, 编译.bashrc写入下面字段
+# vim .bashrc
+
+ export JAVA_HOME=~/Tools/jdk8
+ export JRE_HOME=${JAVA_HOME}/jre
+ export CLASSPATH=.:${JAVA_HOME}/lib:${JRE_HOME}/lib:$CLASSPATH
+ export JAVA_PATH=${JAVA_HOME}/bin:${JRE_HOME}/bin
+ export PATH=$PATH:${JAVA_PATH}
+
+// 立即生效，之后输入java进行检验
+# source .bashrc
+```
